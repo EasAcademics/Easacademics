@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Tahoma, sans-serif;
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 165, 0, 0.5);
+        }
+        h1 {
+            background-color: orange;
+            padding: 20px;
+            margin: -20px -20px 20px -20px;
+            font-size: 24px;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: orange;
+            color: black;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        .button:hover {
+            background-color: #ffb300;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Login</h1>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button class="button" onclick="login()">Login</button>
+    </div>
+
+    <script>
+        function login() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            var users = {
+                "felipe": "password",
+                "roby": "roby123",
+                "franz": "franz123",
+                "ismael": "ismael123",
+                "divine": "divine123",
+                "beatriz": "drowssap"
+            };
+
+            if (users[username] && users[username] === password) {
+                localStorage.setItem("studentName", username === "beatriz" ? "Ma'am Beatriz" : username);
+                localStorage.setItem("userType", username === "beatriz" ? "teacher" : "student");
+
+                if (username === "beatriz") {
+                    window.location.href = "teacher_portal.html";
+                } else {
+                    window.location.href = "student_portal.html";
+                }
+            } else {
+                alert("Invalid username or password.");
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Tahoma, sans-serif;
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: orange;
+            padding: 20px;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 165, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: orange;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #333;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid orange;
+            text-align: left;
+        }
+
+        th {
+            background-color: orange;
+            color: black;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: orange;
+            color: black;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #ffb300;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        Welcome, <span id="student-name"></span>!
+    </div>
+
+    <div class="container">
+        <h2>Upcoming Tests</h2>
+        <table>
+            <tr>
+                <th>Subject</th>
+                <th>Test Date</th>
+            </tr>
+            <tr>
+                <td>General Physics</td>
+                <td>March 20, 2025</td>
+            </tr>
+            <tr>
+                <td>Physical Education</td>
+                <td>March 22, 2025</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="container">
+        <h2>School Activities</h2>
+        <table>
+            <tr>
+                <th>Event</th>
+                <th>Date</th>
+            </tr>
+            <tr>
+                <td>53rd Provincial Jamboree</td>
+                <td>March 17, 2025</td>
+            </tr>
+            <tr>
+                <td>Graduation</td>
+                <td>April 15, 2025</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="container">
+        <h2>Test Scores</h2>
+        <table id="scoreTable">
+            <tr>
+                <th>Subject</th>
+                <th>Score</th>
+            </tr>
+        </table>
+    </div>
+
+    <div class="container">
+        <a href="login.html" class="button" onclick="logout()">Logout</a>
+    </div>
+
+    <script>
+        // Display student name from localStorage
+        document.getElementById("student-name").innerText = 
+            localStorage.getItem("studentName") || "Student";
+
+        // Student scores data
+        const scoresData = {
+            "felipe": [
+                ["General Physics", 85],
+                ["Physical Education", 90]
+            ],
+            "roby": [
+                ["General Physics", 78],
+                ["Physical Education", 88]
+            ],
+            "franz": [
+                ["General Physics", 82],
+                ["Physical Education", 91]
+            ],
+            "ismael": [
+                ["General Physics", 80],
+                ["Physical Education", 85]
+            ],
+            "divine": [
+                ["General Physics", 88],
+                ["Physical Education", 92]
+            ]
+        };
+
+        // Get the logged-in student's name
+        const studentUsername = localStorage.getItem("studentName");
+        const scoreTable = document.getElementById("scoreTable");
+
+        // Display student scores
+        if (scoresData[studentUsername]) {
+            scoresData[studentUsername].forEach(score => {
+                let row = scoreTable.insertRow();
+                row.insertCell(0).textContent = score[0];
+                row.insertCell(1).textContent = score[1];
+            });
+        } else {
+            let row = scoreTable.insertRow();
+            let cell = row.insertCell(0);
+            cell.colSpan = 2;
+            cell.textContent = "No scores available.";
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "login.html";
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload & Manage Student Scores</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Tahoma, sans-serif;
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: orange;
+            padding: 20px;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 165, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: orange;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #333;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid orange;
+            text-align: left;
+        }
+
+        th {
+            background-color: orange;
+            color: black;
+        }
+
+        .button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: orange;
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #ffb300;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .delete-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        Welcome, <span id="teacher-name"></span>!
+    </div>
+
+    <div class="container">
+        <h2>Upload Excel File</h2>
+        <input type="file" id="fileInput" class="button" accept=".xls,.xlsx">
+    </div>
+
+    <div class="container">
+        <h2>Manual Entry</h2>
+        <input type="text" id="studentName" placeholder="Student Name">
+        <input type="text" id="subject" placeholder="Subject">
+        <input type="number" id="score" placeholder="Score">
+        <button class="button" onclick="addManualEntry()">Add</button>
+    </div>
+
+    <div class="container">
+        <h2>Student Scores</h2>
+        <table id="scoreTable">
+            <tr>
+                <th>Student Name</th>
+                <th>Subject</th>
+                <th>Score</th>
+                <th>Action</th>
+            </tr>
+        </table>
+        <button class="button" onclick="downloadExcel()">Download Excel</button>
+    </div>
+
+    <div class="container">
+        <a href="login.html" class="button" onclick="logout()">Logout</a>
+    </div>
+
+    <script>
+        // Set teacher's name from localStorage
+        document.getElementById("teacher-name").innerText =
+            localStorage.getItem("teacherName") || "Teacher";
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "login.html";
+        }
+
+        function addManualEntry() {
+            let studentName = document.getElementById('studentName').value;
+            let subject = document.getElementById('subject').value;
+            let score = document.getElementById('score').value;
+
+            if (studentName && subject && score) {
+                let table = document.getElementById('scoreTable');
+                let row = table.insertRow();
+                row.insertCell(0).textContent = studentName;
+                row.insertCell(1).textContent = subject;
+                row.insertCell(2).textContent = score;
+                
+                let deleteCell = row.insertCell(3);
+                let deleteBtn = document.createElement('button');
+                deleteBtn.textContent = "Delete";
+                deleteBtn.classList.add("delete-btn");
+                deleteBtn.onclick = function() { table.deleteRow(row.rowIndex); };
+                deleteCell.appendChild(deleteBtn);
+
+                document.getElementById('studentName').value = "";
+                document.getElementById('subject').value = "";
+                document.getElementById('score').value = "";
+            } else {
+                alert("Please fill in all fields.");
+            }
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            let file = event.target.files[0];
+            if (!file) return;
+
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let data = new Uint8Array(e.target.result);
+                let workbook = XLSX.read(data, { type: 'array' });
+
+                let firstSheetName = workbook.SheetNames[0];
+                let worksheet = workbook.Sheets[firstSheetName];
+
+                let rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                let table = document.getElementById('scoreTable');
+
+                for (let i = 1; i < rows.length; i++) {
+                    let row = rows[i];
+                    if (row.length < 3) continue; 
+
+                    let newRow = table.insertRow();
+                    newRow.insertCell(0).textContent = row[0];
+                    newRow.insertCell(1).textContent = row[1];
+                    newRow.insertCell(2).textContent = row[2];
+
+                    let deleteCell = newRow.insertCell(3);
+                    let deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = "Delete";
+                    deleteBtn.classList.add("delete-btn");
+                    deleteBtn.onclick = function() { table.deleteRow(newRow.rowIndex); };
+                    deleteCell.appendChild(deleteBtn);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        function downloadExcel() {
+            let table = document.getElementById('scoreTable');
+            let rows = [];
+
+            for (let i = 1; i < table.rows.length; i++) {
+                let row = table.rows[i];
+                let rowData = [
+                    row.cells[0].textContent,
+                    row.cells[1].textContent,
+                    row.cells[2].textContent
+                ];
+                rows.push(rowData);
+            }
+
+            let worksheet = XLSX.utils.aoa_to_sheet([["Student Name", "Subject", "Score"], ...rows]);
+            let workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Scores");
+
+            XLSX.writeFile(workbook, "Student_Scores.xlsx");
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+/* General Page Styles */
+body {
+    font-family: Tahoma, sans-serif;
+    background-color: black;
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Header */
+.header {
+    background-color: orange;
+    padding: 20px;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+/* Content Container */
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #222;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(255, 165, 0, 0.5);
+}
+
+/* Section Titles */
+h2 {
+    color: orange;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #333;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid orange;
+}
+
+th {
+    background-color: orange;
+    color: black;
+}
+
+/* Button */
+.button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: orange;
+    color: black;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: #ffb300;
+}
+
+/* Centering the login form */
+.login-container {
+    background-color: #222;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    margin: 100px auto;
+    box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+}
+
+/* Login Title */
+.login-container h2 {
+    color: orange;
+    font-size: 24px;
+}
+
+/* Input Fields */
+.login-container input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid orange;
+    border-radius: 5px;
+    background-color: #333;
+    color: white;
+    text-align: center;
+}
+
+/* Login Button */
+.login-container button {
+    background-color: orange;
+    color: black;
+    padding: 10px;
+    border: none;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.login-container button:hover {
+    background-color: #ffb300;
+}
